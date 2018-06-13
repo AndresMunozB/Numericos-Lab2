@@ -1,0 +1,1 @@
+g++ numericos.cpp -o main -std=c++14 -larmadillo
