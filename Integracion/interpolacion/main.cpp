@@ -1,5 +1,6 @@
 #include <iostream>
 #include "interpolation.h"
+
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -15,17 +16,21 @@ int main(int argc, char *argv[])
     
     cout << resulta << endl;
     cout << resultb << endl;
-    /*vector<double> vectorXi = createVectorXi(-200.0,200.0,0.5);
-    int i;
-    for(i=0;i<vectorXi.size();i++){
+    //Interpolation
+    DifferenceFinite differenceFinite;
+    Interpolation interpolation(&differenceFinite);
+    vector<double> vectorXi = createVectorXi(-200.0,200.0,0.5);
+    vector<double> vectorYi = createVectorYi(vectorXi,&gx);
+    vector<double> vectorXi_0_05 = createVectorXi(-200.0,200.0,0.5);
+    vector<double> result = interpolation.interpolate(vectorXi,vectorYi,vectorXi_0_05);
+    /*
+    for(int i=0;i<vectorXi.size();i++){
         cout << vectorXi[i] << endl;
     }
-    vector<double> vectorYi = createVectorYi(vectorXi,&gx);
-    cout << vectorXi.size() <<endl;
-    for(i=0;i<vectorYi.size();i++){
+    for(int i=0;i<vectorYi.size();i++){
         cout << vectorYi[i] << endl;
-    }*/
-
+    }
+    */
     int fac = factorial(7);
     cout << "factorial:" << fac  << endl;
 

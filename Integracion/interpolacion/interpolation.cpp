@@ -1,5 +1,8 @@
 #include "interpolation.h"
+#include <armadillo>
 
+using namespace arma;
+using namespace std;
 vector<double> createVectorXi(double start, double end, double distance){
     vector<double> result;
     double i;
@@ -39,6 +42,24 @@ int factorial(int n){
 
 vector<double> DifferenceFinite::interpolate(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005){
     vector<double> result;
+    int n = vectorXi.size();
+    mat b = mat(n,n);
+    mat c = mat(n,n);
+    double xt;
+    double yi;
+    for(int i=0;i<n;i++){
+        b(i,0) = vectorYi[i];
+    }
+
+    for(int j=1;j<n;j++){
+		for(int i=0;i<n-j;i++){
+			b(i,j) = b(i+1,j-1) - b(i,j-1);
+		}
+	}
+    for(int i=0; i<n;i++){
+        cout << b(0,i) << endl;
+    }
+
     return result;
 }
 vector<double> DifferenceDivided::interpolate(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005){
