@@ -6,46 +6,15 @@
 
 using namespace std;
 
-//Clase abstracta
-class StrategyInterpolation
-{
-    public:
-        virtual vector<double> interpolate(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005) = 0;
-};
-
-class DifferenceFinite : public StrategyInterpolation
-{
-    public:
-        virtual vector<double> interpolate(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005);
-};
-
-class DifferenceDivided: public StrategyInterpolation
-{
-    public:
-        virtual vector<double> interpolate(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005);
-};
-
-class MinimumSquare: public StrategyInterpolation
-{
-    public:
-        virtual vector<double> interpolate(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005);
-};
-
-class CubicSpline: public StrategyInterpolation
-{
-    public:
-        virtual vector<double> interpolate(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005);
-};
 
 class Interpolation
 {
-    private:
-        StrategyInterpolation *_strategy;
-
     public:
-        Interpolation(StrategyInterpolation *strategy);
-        void set_strategy(StrategyInterpolation *strategy);
-        vector<double> interpolate(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005);
+        virtual vector<double> differenceFinite(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005);
+        virtual vector<double> differenceDivided(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005);
+        virtual vector<double> minimumSquare(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005,int degree);
+        virtual vector<double> cubicSpline(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005);
+     
 };
 
 vector<double> createVectorXi(double start, double end, double distance);

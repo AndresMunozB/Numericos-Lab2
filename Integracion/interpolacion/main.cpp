@@ -10,8 +10,7 @@ int main(int argc, char *argv[])
     Gx gx; //Seguna funcion
 
     //Metodos de interpolacion:
-    DifferenceFinite differenceFinite;
-    MinimumSquare minimumSquare;
+
     
     
     Function function(&fx);
@@ -23,15 +22,16 @@ int main(int argc, char *argv[])
     cout << resultb << endl;*/
     //Interpolation
     //Interpolation interpolation(&differenceFinite);
-    Interpolation interpolation(&minimumSquare);
+    Interpolation interpolation = Interpolation();
     vector<double> vectorXi = createVectorXi(-200.0,200.0,0.5);
     vector<double> vectorYi = createVectorYi(vectorXi,&gx);
-    vector<double> vectorXi_0_05 = createVectorXi(-200.0,200.0,0.5);
-    vector<double> result = interpolation.interpolate(vectorXi,vectorYi,vectorXi_0_05);
+    vector<double> vectorXi_0_05 = createVectorXi(-200.0,200.0,0.05);
+    vector<double> result = interpolation.differenceFinite(vectorXi,vectorYi,vectorXi_0_05);
     
     /*for(int i=0;i<result.size();i++){
-        cout << result[i] << ", ";
+        cout << result[i] << endl;
     }*/
+    cout << result.size() << endl;
 
     
     //int fac = factorial(7);
