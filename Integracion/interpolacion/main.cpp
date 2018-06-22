@@ -10,7 +10,6 @@ int main(int argc, char *argv[])
     Gx gx; //Seguna funcion
     
     //Interpolation
-    //Interpolation interpolation(&differenceFinite);
     Interpolation interpolation = Interpolation();
     vector<double> vectorXi = createVectorXi(-200.0,200.0,0.5);
     vector<double> vectorYi = createVectorYi(vectorXi,&gx);
