@@ -1,2 +1,0 @@
-g++ numericos.cpp -o main -std=c++14 -larmadillo
-g++ function.cpp interpolation.cpp main.cpp -o main.out -std=c++14 -larmadillo
