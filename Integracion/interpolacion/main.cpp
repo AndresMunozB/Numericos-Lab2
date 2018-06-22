@@ -8,18 +8,7 @@ int main(int argc, char *argv[])
     //Funciones
     Fx fx; //Primera funcion
     Gx gx; //Seguna funcion
-
-    //Metodos de interpolacion:
-
     
-    
-    Function function(&fx);
-    /*double resulta = function.execute(5.0);
-    function.set_strategy(&gx);
-    double resultb = function.execute(6.0);
-    
-    cout << resulta << endl;
-    cout << resultb << endl;*/
     //Interpolation
     //Interpolation interpolation(&differenceFinite);
     Interpolation interpolation = Interpolation();
@@ -33,9 +22,6 @@ int main(int argc, char *argv[])
     }*/
     cout << result.size() << endl;
 
-    
-    //int fac = factorial(7);
-    //cout << "factorial:" << fac  << endl;
 
 
     return 0;
