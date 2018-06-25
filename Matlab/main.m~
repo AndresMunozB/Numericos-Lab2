@@ -1,0 +1,5 @@
+filename = 'archivo.txt';
+delimiterIn = ' ';
+A = importdata(filename,delimiterIn);
+x = A(1:,2);
+graficar([1,2,3],[1,4,9])

@@ -1,33 +1,26 @@
 #include "interpolation.h"
 #include <armadillo>
+#include <math.h>
+
 
 using namespace arma;
 using namespace std;
 
-vector<double> createVectorXi(double start, double end, double distance){
-    vector<double> result;
-    
-	for(double i = start; i <= end; i = i + distance){
-		result.push_back(i);
-	}
-	return result;
-}
-
-vector<double> createVectorYi(vector<double> vectorXi, StrategyFunction *strategy){
-    Function function(strategy);
-    vector<double> result;
-    int i,buffer;
-    int length = vectorXi.size();
-    for(i=0;i<length;i++){
-        buffer = function.execute(vectorXi[i]);
-        result.push_back(buffer);
+double fx(double x,int type){
+    if(type == 1){
+        return exp(x)+x - 2;
     }
-    return result;
+    else if(type == 2){
+        return pow(x,3)+4*pow(x,2)-10*x+2;
+    }
+    else{
+        cout << "Error en tipo de función" << endl;
+        return 0;
+    }
 }
 
 int factorial(int n){
     int result = 1;
-    int i;
     if(n<0){
         return 0;
     }
@@ -35,9 +28,38 @@ int factorial(int n){
         return 1;
     }
     else{
-        for(i=1;i<=n;i++){
+        for(int i=1;i<=n;i++){
             result *= i;
         }
+    }
+    return result;
+}
+
+void save(string nameFile,vector<double> vectorXi, vector<double> vectorYi){
+	ofstream output;
+	output.open(nameFile,ios::out);
+	for(int i = 0; i<vectorXi.size(); i++){
+		output<<vectorXi[i]<<" "<<vectorYi[i]<<endl;
+	}
+	output.close();
+}
+
+vector<double> createVectorXi(double start, double end, double distance){
+    vector<double> result;
+    double i = start;
+	for(double i = start; i <= end; i = i + distance){
+		result.push_back(i);
+	}
+	return result;
+}
+
+vector<double> createVectorYi(vector<double> vectorXi, int type){
+    vector<double> result;
+    int i,buffer;
+    int length = vectorXi.size();
+    for(i=0;i<length;i++){
+        buffer = fx(vectorXi[i],type);
+        result.push_back(buffer);
     }
     return result;
 }
@@ -49,24 +71,24 @@ vector<double> Interpolation::differenceFinite(vector<double> vectorXi, vector<d
     mat c = mat(n,n);
     double xt;
     double yi;
+    //
     for(int i=0;i<n;i++){
         b(i,0) = vectorYi[i];
         c(i,0) = vectorYi[i];
     }
-
+    //
     for(int j=1;j<n;j++){
 		for(int i=0;i<n-j;i++){
 			b(i,j) = b(i+1,j-1) - b(i,j-1);
 		}
 	}
-
+    //
     int h = vectorXi[1]-vectorXi[0];
 	for(int j = 1; j<n;j++){
 		for(int i=0; i<n-j;i++){
 			c(i,j) = (b(i,j))/((pow(h,j))*factorial(j));
 		}
 	}
-
     //Calculando los Yi despues de interpolar la funcion
     int contador = vectorXi_005.size();
 	for(int i = 0; i<contador; i++){
@@ -78,9 +100,6 @@ vector<double> Interpolation::differenceFinite(vector<double> vectorXi, vector<d
 		}
         result.push_back(yi);
     }
-		
-    
-
     return result;
 }
 
@@ -90,16 +109,16 @@ vector<double> Interpolation::differenceDivided(vector<double> vectorXi, vector<
     mat b = mat(n,n);
     double xt;
     double yi;
+    //
     for(int i=0;i<n;i++){
         b(i,0) = vectorYi[i];
     }
-
+    //
     for(int j=1;j<n;j++){
 		for(int i=0;i<n-j;i++){
 			b(i,j) = (b(i+1,j-1) - b(i,j-1))/(vectorXi[i+j]-vectorXi[i]);
 		}
 	}
-
     int contador = vectorXi_005.size();
 	for(int i = 0; i<contador; i++){
 		xt=1;
@@ -117,13 +136,12 @@ vector<double> Interpolation::differenceDivided(vector<double> vectorXi, vector<
 vector<double> Interpolation::minimumSquare(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005,int degree){
     vector<double> result;
     vector<double> summations;
-
     int maxDegree = 2*degree;
     int n = degree+1;
     mat A = mat(n,n); 
     mat B = mat(n,1); 
-
     double sum;
+
     //Se calcula los valores de las diferentes sumatorias 
     for(int i=0 ; i<=maxDegree ; i++){
         sum = 0;
@@ -138,7 +156,6 @@ vector<double> Interpolation::minimumSquare(vector<double> vectorXi, vector<doub
             A(i,j)= summations[i+j];
         }
     }
-
     //Se llena la matriz B (sumatorias) -> E(Yi*Xi^n)
     for(int i=0;i<n;i++){
           sum = 0;
@@ -147,7 +164,6 @@ vector<double> Interpolation::minimumSquare(vector<double> vectorXi, vector<doub
           }
           B(i,0)=sum;
     }
-
     //mat x = solve(A,B); //warning
     //mat c = inv(A)*B;
 
@@ -156,7 +172,6 @@ vector<double> Interpolation::minimumSquare(vector<double> vectorXi, vector<doub
     lu(L, U, A);
     mat Y = inv(L)*B;
     mat C = inv(U)*Y;
-
     //Se calculan los Yi despues de interpolar la funcion.
     int size = vectorXi_005.size();
     double resultYi;
@@ -165,7 +180,6 @@ vector<double> Interpolation::minimumSquare(vector<double> vectorXi, vector<doub
         for (int j = 0; j < n ; j++){
             resultYi = C(j,0) * pow(vectorXi_005[i],j);
         }
-        cout << endl;
         result.push_back(resultYi);
     }
     return result;
@@ -177,5 +191,40 @@ vector<double> Interpolation::cubicSpline(vector<double> vectorXi, vector<double
     return result;
 }
 
+double Interpolation::RMSE(vector<double> vectorYiIntepolate, vector<double> vectorYiRial){
+	double size = vectorYiRial.size();
+	double result = 0;
+	for(int i = 0; i<size;i++){
+		result += pow(vectorYiRial[i]-vectorYiIntepolate[i],2.0);
+	}
+	result = sqrt(result/size);
+	return result;
+}
 
+void minErrorMinimumSquare(){
+    vector<double> vectorXi     = createVectorXi(-200.0,200.0,5);
+    vector<double> vectorXiRial = createVectorXi(-200.0,200.0,0.05);
+
+    vector<double> vectorYi     = createVectorYi(vectorXi,1);
+    vector<double> vectorYiRial = createVectorYi(vectorXiRial,1);
+    
+    Interpolation interpolation = Interpolation();
+    vector<double> result = interpolation.minimumSquare(vectorXi,vectorYi,vectorXiRial,1);
+    double minError = interpolation.RMSE(result,vectorYiRial) ;
+    double aux = minError;
+    cout << aux << ", " << 1 << endl;
+
+    int iteration = 1;
+    for (int i=2;i<67;i++){
+            result = interpolation.minimumSquare(vectorXi,vectorYi,vectorXiRial,i);
+            aux = interpolation.RMSE(result,vectorYiRial);
+            if(minError > aux){
+                minError = aux;
+                iteration = i;
+            }
+            cout << aux << ", " << i << endl;
+    }
+    cout << "minError : " << minError << endl;
+    cout << "Iteration: " << iteration << endl;
+}
 
