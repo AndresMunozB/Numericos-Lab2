@@ -1,7 +1,13 @@
-filename = 'archivo.txt';
+filename = 'archivo1.txt';
 delimiterIn = ' ';
 A = importdata(filename,delimiterIn);
-y = A(1:end,2);
-x = A(1:end,1);
-exp(10)
-graficar(x,y);
+
+filename = 'archivo2.txt';
+delimiterIn = ' ';
+B = importdata(filename,delimiterIn);
+
+    
+
+graficar(A,B);
+graficar1(A);
+graficar1(B);
