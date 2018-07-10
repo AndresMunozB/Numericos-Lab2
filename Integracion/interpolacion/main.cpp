@@ -15,12 +15,12 @@ int main(int argc, char *argv[])
     vector<double> vectorYi     = createVectorYi(vectorXi,1);
     vector<double> vectorYiRial = createVectorYi(vectorXiRial,1);
 
-    vector<double> result = interpolation.differenceFinite(vectorXi,vectorYi,vectorYiRial);
-    save("archivo.txt",vectorXiRial,vectorYiRial);
+    vector<double> result = interpolation.minimumSquare(vectorXi,vectorYi,vectorYiRial,5);
+    save("archivo.txt",vectorXi,result);
     //minErrorMinimumSquare();
-    /*for(int i=0;i<result.size();i++){
+    for(int i=0;i<result.size();i++){
         cout << result[i] << endl;
-    }*/
+    }
     cout << result.size() << endl;
 
 

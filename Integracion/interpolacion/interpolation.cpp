@@ -11,7 +11,7 @@ double fx(double x,int type){
         return exp(x)+x - 2;
     }
     else if(type == 2){
-        return pow(x,3)+4*pow(x,2)-10*x+2;
+        return pow(x,3)+4*pow(x,2)-5*x+2;
     }
     else{
         cout << "Error en tipo de función" << endl;
@@ -46,7 +46,6 @@ void save(string nameFile,vector<double> vectorXi, vector<double> vectorYi){
 
 vector<double> createVectorXi(double start, double end, double distance){
     vector<double> result;
-    double i = start;
 	for(double i = start; i <= end; i = i + distance){
 		result.push_back(i);
 	}
@@ -55,7 +54,8 @@ vector<double> createVectorXi(double start, double end, double distance){
 
 vector<double> createVectorYi(vector<double> vectorXi, int type){
     vector<double> result;
-    int i,buffer;
+    int i;
+    double buffer;
     int length = vectorXi.size();
     for(i=0;i<length;i++){
         buffer = fx(vectorXi[i],type);
@@ -64,7 +64,7 @@ vector<double> createVectorYi(vector<double> vectorXi, int type){
     return result;
 }
 
-vector<double> Interpolation::differenceFinite(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005){
+vector<double> Interpolation::differenceFinite(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_0_05){
     vector<double> result;
     int n = vectorXi.size();
     mat b = mat(n,n);
@@ -77,33 +77,38 @@ vector<double> Interpolation::differenceFinite(vector<double> vectorXi, vector<d
         c(i,0) = vectorYi[i];
     }
     //
+
     for(int j=1;j<n;j++){
 		for(int i=0;i<n-j;i++){
 			b(i,j) = b(i+1,j-1) - b(i,j-1);
 		}
 	}
+
     //
     int h = vectorXi[1]-vectorXi[0];
 	for(int j = 1; j<n;j++){
 		for(int i=0; i<n-j;i++){
 			c(i,j) = (b(i,j))/((pow(h,j))*factorial(j));
+            cout << "factorial(j): " << factorial(j) << endl; 
 		}
 	}
+
     //Calculando los Yi despues de interpolar la funcion
-    int contador = vectorXi_005.size();
+    int contador = vectorXi_0_05.size();
 	for(int i = 0; i<contador; i++){
 		xt=1;
 		yi = c(0,0);
 		for(int j = 0;j<n-1;j++){
-			xt = xt*(vectorXi_005[i]-vectorXi[j]);
+			xt = xt*(vectorXi_0_05[i]-vectorXi[j]);
 			yi = yi + c(0,j+1)*xt;
 		}
         result.push_back(yi);
     }
+
     return result;
 }
 
-vector<double> Interpolation::differenceDivided(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005){
+vector<double> Interpolation::differenceDivided(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_0_05){
     vector<double> result;
     int n = vectorXi.size();
     mat b = mat(n,n);
@@ -119,12 +124,12 @@ vector<double> Interpolation::differenceDivided(vector<double> vectorXi, vector<
 			b(i,j) = (b(i+1,j-1) - b(i,j-1))/(vectorXi[i+j]-vectorXi[i]);
 		}
 	}
-    int contador = vectorXi_005.size();
+    int contador = vectorXi_0_05.size();
 	for(int i = 0; i<contador; i++){
 		xt=1;
 		yi = b(0,0);
 		for(int j = 0;j<n-1;j++){
-			xt = xt*(vectorXi_005[i]-vectorXi[j]);
+			xt = xt*(vectorXi_0_05[i]-vectorXi[j]);
 			yi = yi + b(0,j+1)*xt;
 		}
         result.push_back(yi);
@@ -133,35 +138,41 @@ vector<double> Interpolation::differenceDivided(vector<double> vectorXi, vector<
     return result;
 }
 
-vector<double> Interpolation::minimumSquare(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005,int degree){
-    vector<double> result;
+vector<double> Interpolation::minimumSquare(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_0_05, int degree){
+    vector<double> result; //Vector que retorna la funcion
     vector<double> summations;
     int maxDegree = 2*degree;
     int n = degree+1;
     mat A = mat(n,n); 
     mat B = mat(n,1); 
     double sum;
-
     //Se calcula los valores de las diferentes sumatorias 
     for(int i=0 ; i<=maxDegree ; i++){
         sum = 0;
         for(int j=0;j<vectorXi.size();j++){
             sum +=  pow(vectorXi[j],i);
+            cout <<"i,j:" << i <<","<< j <<" ;vectorXi[j]: " << vectorXi[j] << " ;pow: "<< pow(vectorXi[j],i)<< endl;
         }
+        cout << endl;
         summations.push_back(sum);
     }
     //Se llena la matriz A con los valores calculados (sumatorias).
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
             A(i,j)= summations[i+j];
+            cout << summations[i+j] << ", ";
         }
+        cout << endl ;
     }
     //Se llena la matriz B (sumatorias) -> E(Yi*Xi^n)
     for(int i=0;i<n;i++){
           sum = 0;
           for(int j=0;j<vectorXi.size();j++){
-              sum += vectorYi[j]*(pow(vectorXi[j],i));
+              sum += vectorYi[j]*(pow(vectorXi[j],i));  
+              //cout << vectorYi[j] << ", " << vectorXi[j] << endl;  
           }
+          //cout <<"i:"<< i <<"sum: " << sum << endl;
+          //cout << endl;
           B(i,0)=sum;
     }
     //mat x = solve(A,B); //warning
@@ -172,21 +183,24 @@ vector<double> Interpolation::minimumSquare(vector<double> vectorXi, vector<doub
     lu(L, U, A);
     mat Y = inv(L)*B;
     mat C = inv(U)*Y;
+
     //Se calculan los Yi despues de interpolar la funcion.
-    int size = vectorXi_005.size();
+    int size = vectorXi_0_05.size();
     double resultYi;
     for (int i = 0; i < size; ++i)
     {
         for (int j = 0; j < n ; j++){
-            resultYi = C(j,0) * pow(vectorXi_005[i],j);
+            resultYi += C(j,0) * pow(vectorXi_0_05[i],j);
+            //cout << j << ", ";
         }
+        //cout <<"i: " << i  << "val:" << resultYi<< endl;
         result.push_back(resultYi);
-    }
+    }   
     return result;
    
 }
 
-vector<double> Interpolation::cubicSpline(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005){
+vector<double> Interpolation::cubicSpline(vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_0_05){
     vector<double> result;
     return result;
 }

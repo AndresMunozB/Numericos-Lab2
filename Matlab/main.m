@@ -8,6 +8,6 @@ B = importdata(filename,delimiterIn);
 
     
 
-graficar(A,B);
+graficar(A,B);  
 graficar1(A);
 graficar1(B);
