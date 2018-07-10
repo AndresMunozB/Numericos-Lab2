@@ -138,7 +138,7 @@ vector<long double> Interpolation::differenceFinite(vector<long double> vectorXi
 		}
 	}
     for (int i = 0 ; i < n; i++){
-        cout << c[0][i] << endl;
+        //cout << c[0][i] << endl;
     }
 
     //Calculando los Yi despues de interpolar la funcion
@@ -185,7 +185,7 @@ vector<long double> Interpolation::differenceDivided(vector<long double> vectorX
     }
 
     for (int i = 0 ; i < n; i++){
-        cout << b[0][i] << endl;
+        //cout << b[0][i] << endl;
     }
 
     
@@ -209,10 +209,10 @@ vector<long double> Interpolation::differenceDivided(vector<long double> vectorX
 		for(int j = 0;j<n;j++){//evaluar el punto en el polinomio interpolado.
             xi = b[j][0];
             ai = b[0][j+2];
-            cout <<"x: " <<  x << " # xi: " << xi << " # xta: "<< xt << "# ai: " << ai;
+            //cout <<"x: " <<  x << " # xi: " << xi << " # xta: "<< xt << "# ai: " << ai;
 			xt = xt*(x-xi);
 			yi = yi + ai*xt;
-            cout << " # xtd: "<< xt<< " # yi: " <<yi << endl;
+            //cout << " # xtd: "<< xt<< " # yi: " <<yi << endl;
             
 		}
         //cout << endl;
@@ -238,18 +238,18 @@ vector<long double> Interpolation::minimumSquare(vector<long double> vectorXi, v
         sum = 0;
         for(int j=0;j<vectorXi.size();j++){
             sum +=  pow(vectorXi[j],i);
-            cout <<"i,j:" << i <<","<< j <<" ;vectorXi[j]: " << vectorXi[j] << " ;pow: "<< pow(vectorXi[j],i)<< endl;
+            //cout <<"i,j:" << i <<","<< j <<" ;vectorXi[j]: " << vectorXi[j] << " ;pow: "<< pow(vectorXi[j],i)<< endl;
         }
-        cout << endl;
+        //cout << endl;
         summations.push_back(sum);
     }
     //Se llena la matriz A con los valores calculados (sumatorias).
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
             A(i,j)= summations[i+j];
-            cout << summations[i+j] << ", ";
+            //cout << summations[i+j] << ", ";
         }
-        cout << endl ;
+        //cout << endl ;
     }
     //Se llena la matriz B (sumatorias) -> E(Yi*Xi^n)
     for(int i=0;i<n;i++){
@@ -278,9 +278,9 @@ vector<long double> Interpolation::minimumSquare(vector<long double> vectorXi, v
     {
         resultYi = 0;
         for (int j = 0; j < n ; j++){
-            cout <<  "C(j,0): " << C(j,0) << " # pow(vectorXi_0_05[i],j): " << pow(vectorXi_0_05[i],j); 
+            //cout <<  "C(j,0): " << C(j,0) << " # pow(vectorXi_0_05[i],j): " << pow(vectorXi_0_05[i],j); 
             resultYi += C(j,0) * pow(vectorXi_0_05[i],j);
-            cout << " # resultYi: " << resultYi << endl; 
+            //cout << " # resultYi: " << resultYi << endl; 
             //cout << j << ", ";
         }
         //cout <<"i: " << i  << "val:" << resultYi<< endl;
@@ -300,5 +300,3 @@ long double Interpolation::RMSE(vector<long double> vectorYiIntepolate, vector<l
 	result = sqrt(result/size);
 	return result;
 }
-
-
