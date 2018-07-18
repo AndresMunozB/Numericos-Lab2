@@ -6,22 +6,23 @@
 
 using namespace std;
 
-vector<double> createVectorXi   (double start, double end, double distance);
-vector<double> createVectorYi   (vector<double> vectorXi, int type);
-int            factorial        (int n);
-double         fx               (double x,int type);
-void           save             (string nameFile,vector<double> vectorXi, vector<double> vectorYi);
-void           minErrorMinimumSquare();
+vector<long double> createVectorXi   (long double start, long double end, long double distance);
+vector<long double> createVectorYi   (vector<long double> vectorXi, int type);
+long double         factorial        (long double n);
+long double         fx               (long double x,int type);
+void                saveInterpolationResult             (string nameFile,vector<long double> vectorXi, vector<long double> vectorYi);
+void saveInterpolationError(int function,vector<long double> error_df, vector<long double> error_dd, vector<long double> error_ms, vector<long double> error_sc);
+void                minErrorMinimumSquare();
 
 
 class Interpolation
 {
     public:
-        virtual vector<double> differenceFinite     (vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005);
-        virtual vector<double> differenceDivided    (vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005);
-        virtual vector<double> minimumSquare        (vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005,int degree);
-        virtual vector<double> cubicSpline          (vector<double> vectorXi, vector<double> vectorYi, vector<double> vectorXi_005);
-        virtual double         RMSE                 (vector<double> vectorYiIntepolate, vector<double> vectorYiRial);    
+        virtual vector<long double> differenceFinite     (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005);
+        virtual vector<long double> differenceDivided    (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005);
+        virtual vector<long double> minimumSquare        (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005,int degree);
+        //virtual vector<long double> cubicSpline          (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005);
+        virtual long double         RMSE                 (vector<long double> vectorYiIntepolate, vector<long double> vectorYiRial);    
 };
 
 #endif

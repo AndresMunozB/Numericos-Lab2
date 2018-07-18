@@ -3,12 +3,12 @@
 CalculoIntegral::CalculoIntegral(){
 }
 
-double CalculoIntegral::formulaTrapecio(vector<double> vectorInterpolado, double a, double b){
+long double CalculoIntegral::trapecio(vector<long double> vectorInterpolado, long double a, long double b){
 	int largo = vectorInterpolado.size();
-	double integral;
-	double inicio = vectorInterpolado[0];
-	double final = vectorInterpolado[largo-1];
-	double valor = 0.0;
+	long double integral;
+	long double inicio = vectorInterpolado[0];
+	long double final = vectorInterpolado[largo-1];
+	long double valor = 0.0;
 
 	for(int i = 1; i<(largo-1); i++){
 		valor = valor + (2.0*vectorInterpolado[i]);
@@ -18,14 +18,14 @@ double CalculoIntegral::formulaTrapecio(vector<double> vectorInterpolado, double
 	return integral;
 }
 
-double CalculoIntegral::formulaSimpson(int n, vector<double> vectorInterpolado, double a, double b){
+long double CalculoIntegral::simpson(int n, vector<long double> vectorInterpolado, long double a, long double b){
 
-	double valoresImpares = 0.0;
-	double valoresPares = 0.0;
+	long double valoresImpares = 0.0;
+	long double valoresPares = 0.0;
 	int largo = vectorInterpolado.size();
-	double inicial = vectorInterpolado[0];
-	double final = vectorInterpolado[n];
-	double integral = 0.0;
+	long double inicial = vectorInterpolado[0];
+	long double final = vectorInterpolado[n];
+	long double integral = 0.0;
 
 	for (int i = 1; i <= (n/2) -1; i++)
 	{	
@@ -44,9 +44,9 @@ double CalculoIntegral::formulaSimpson(int n, vector<double> vectorInterpolado, 
 
 }
 
-double CalculoIntegral::errorRelativo(double valorMedido, double valorReal){
-	double error;
-	double absoluto;
+long double CalculoIntegral::errorRelativo(long double valorMedido, long double valorReal){
+	long double error;
+	long double absoluto;
 	absoluto = valorReal-valorMedido;
 	error = abs(absoluto)/valorReal;
 	return error;

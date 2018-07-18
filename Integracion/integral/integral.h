@@ -13,9 +13,9 @@ class CalculoIntegral
 {
 	public:
 		CalculoIntegral();
-		double formulaTrapecio(vector<double> vectorInterpolado, double a, double b);
-		double formulaSimpson(int n, vector<double> vectorInterpolado, double a, double b);
-		double errorRelativo(double valorMedido, double valorReal);
+		long double trapecio(vector<long double> vectorInterpolado, long double a, long double b);
+		long double simpson(int n, vector<long double> vectorInterpolado, long double a, long double b);
+		long double errorRelativo(long double valorMedido, long double valorReal);
 };
 
 #endif
