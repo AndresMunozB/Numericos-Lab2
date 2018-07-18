@@ -29,7 +29,7 @@ void execute(int function){
     vector<long double> error_df; //RMSE Diferencias Finitas.
     vector<long double> error_dd; //RMSE Diferencias Divididas.
     vector<long double> error_ms; //RMSE Minimos Cuadrados.
-    vector<long double> error_sc; //RMSE Spline Cubico.
+    vector<long double> error_cs; //RMSE Spline Cubico.
 
     
 
@@ -79,27 +79,40 @@ void execute(int function){
     else if(function == 2){
         degree  = 15;
     }
-    //result_0_5 = interpolation.minimumSquare(vectorXi_0_5,vectorYi_0_5,vectorXiRial,degree);
-    //result_1   = interpolation.minimumSquare(vectorXi_1  ,vectorYi_1  ,vectorXiRial,degree);
-    //result_5   = interpolation.minimumSquare(vectorXi_5  ,vectorYi_5  ,vectorXiRial,degree);
+    result_0_5 = interpolation.minimumSquare(vectorXi_0_5,vectorYi_0_5,vectorXiRial,degree);
+    result_1   = interpolation.minimumSquare(vectorXi_1  ,vectorYi_1  ,vectorXiRial,degree);
+    result_5   = interpolation.minimumSquare(vectorXi_5  ,vectorYi_5  ,vectorXiRial,degree);
     result_10  = interpolation.minimumSquare(vectorXi_10 ,vectorYi_10 ,vectorXiRial,degree);
-    //error_ms.push_back(interpolation.RMSE(result_0_5,vectorYiRial));
-    //error_ms.push_back(interpolation.RMSE(result_1  ,vectorYiRial));
-    //error_ms.push_back(interpolation.RMSE(result_5  ,vectorYiRial));
+    error_ms.push_back(interpolation.RMSE(result_0_5,vectorYiRial));
+    error_ms.push_back(interpolation.RMSE(result_1  ,vectorYiRial));
+    error_ms.push_back(interpolation.RMSE(result_5  ,vectorYiRial));
     error_ms.push_back(interpolation.RMSE(result_10 ,vectorYiRial));
-    //saveInterpolationResult("../../Matlab/MS_f" + to_string(function) + "_0_5.dat",vectorXiRial,result_0_5);
-    //saveInterpolationResult("../../Matlab/MS_f" + to_string(function) + "_1.dat"  ,vectorXiRial,result_1);
-    //saveInterpolationResult("../../Matlab/MS_f" + to_string(function) + "_5.dat"  ,vectorXiRial,result_5);
+    saveInterpolationResult("../../Matlab/MS_f" + to_string(function) + "_0_5.dat",vectorXiRial,result_0_5);
+    saveInterpolationResult("../../Matlab/MS_f" + to_string(function) + "_1.dat"  ,vectorXiRial,result_1);
+    saveInterpolationResult("../../Matlab/MS_f" + to_string(function) + "_5.dat"  ,vectorXiRial,result_5);
     saveInterpolationResult("../../Matlab/MS_f" + to_string(function) + "_10.dat" ,vectorXiRial,result_10);
     cout  << "END MINIMOS CUADRADOS" << endl;
     //END MINIMOS CUADRADOSerror_sc
 
     //SPLINE CUBICO
-    //codigo spline cubico
+     cout  << "SPLINE CUBICO..." << endl;
+    result_0_5 = interpolation.cubicSpline(vectorXi_0_5,vectorYi_0_5,vectorXiRial);
+    result_1   = interpolation.cubicSpline(vectorXi_1  ,vectorYi_1  ,vectorXiRial);
+    result_5   = interpolation.cubicSpline(vectorXi_5  ,vectorYi_5  ,vectorXiRial);
+    result_10  = interpolation.cubicSpline(vectorXi_10 ,vectorYi_10 ,vectorXiRial);
+    error_cs.push_back(interpolation.RMSE(result_0_5,vectorYiRial));
+    error_cs.push_back(interpolation.RMSE(result_1  ,vectorYiRial));
+    error_cs.push_back(interpolation.RMSE(result_5  ,vectorYiRial));
+    error_cs.push_back(interpolation.RMSE(result_10 ,vectorYiRial));
+    saveInterpolationResult("../../Matlab/CS_f" + to_string(function) + "_0_5.dat",vectorXiRial,result_0_5);
+    saveInterpolationResult("../../Matlab/CS_f" + to_string(function) + "_1.dat"  ,vectorXiRial,result_1);
+    saveInterpolationResult("../../Matlab/CS_f" + to_string(function) + "_5.dat"  ,vectorXiRial,result_5);
+    saveInterpolationResult("../../Matlab/CS_f" + to_string(function) + "_10.dat" ,vectorXiRial,result_10);
+    cout  << "END SPLINE CUBICO" << endl;
     //END SPLINE CUBICO
 
     //Guardando los RMSE
-    //saveInterpolationError(function,error_df,error_dd,error_ms,error_sc);
+    saveInterpolationError(function,error_df,error_dd,error_ms,error_cs);
 
 }
 

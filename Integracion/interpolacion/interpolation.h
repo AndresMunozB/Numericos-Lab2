@@ -21,7 +21,7 @@ class Interpolation
         virtual vector<long double> differenceFinite     (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005);
         virtual vector<long double> differenceDivided    (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005);
         virtual vector<long double> minimumSquare        (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005,int degree);
-        //virtual vector<long double> cubicSpline          (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005);
+        virtual vector<long double> cubicSpline          (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005);
         virtual long double         RMSE                 (vector<long double> vectorYiIntepolate, vector<long double> vectorYiRial);    
 };
 
