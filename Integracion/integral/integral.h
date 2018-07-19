@@ -1,18 +1,17 @@
-#ifndef CALCULOINTEGRAL_H
-#define CALCULOINTEGRAL_H
+#ifndef INTEGRAL_H
+#define INTEGRAL_H
 
 #include <iostream>
-#include <cmath>
 #include <math.h>
-#include <armadillo>
+#include <vector>
 
 using namespace std;
-using namespace arma;
 
-class CalculoIntegral
+
+class Integral
 {
 	public:
-		CalculoIntegral();
+		Integral();
 		long double trapecio(vector<long double> vectorInterpolado, long double a, long double b);
 		long double simpson(int n, vector<long double> vectorInterpolado, long double a, long double b);
 		long double errorRelativo(long double valorMedido, long double valorReal);

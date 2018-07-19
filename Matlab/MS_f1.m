@@ -1,3 +1,4 @@
+function MS_f1
 filename = 'MS_f1_0_5.dat';
 delimiterIn = ' ';
 A = importdata(filename,delimiterIn);
@@ -32,3 +33,4 @@ graficarTodos(A,B,C,D,E,'Mínimos Cuadrados, Función: 1');
 %graficar1(C);
 %graficar1(D);
 %graficar1(E);
+end

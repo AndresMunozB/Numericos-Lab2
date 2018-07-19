@@ -113,13 +113,15 @@ void execute(int function){
 
     //Guardando los RMSE
     saveInterpolationError(function,error_df,error_dd,error_ms,error_cs);
+    Integral integral = Integral();
+    cout <<  integral.trapecio(result_0_5,-200,200) << endl;
 
 }
 
 int main(int argc, char *argv[])
 {
     execute(1);
-    //execute(2);
+    execute(2);
     return 0;
 }
 

@@ -1,3 +1,4 @@
+function DF_f2
 filename = 'DF_f2_0_5.dat';
 delimiterIn = ' ';
 A = importdata(filename,delimiterIn);
@@ -33,3 +34,4 @@ graficarTodos(A,B,C,D,E,'Diferencias Finitas, Función: 2');
 %graficar1(E);
 %graficar1(A);
 %graficar1(B);
+end

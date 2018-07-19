@@ -207,7 +207,7 @@ vector<vector<long double>> createMatrizDividided(vector<long double> vectorXi, 
         for( i = 0 ; i< n-k;i++){
             b[i][j] = (b[i+1][j-1] - b[i][j-1])/(b[i+1][0] -b[i][0]);    
             //b[j][i] = ( (b[j-1][i+1] - b[j-1][i]) / (b[0][i+1] - b[0][i]) );
-            cout << "b["<< i << "][" << j << "]: " << b[i][j]   << " # "<< endl;
+            //cout << "b["<< i << "][" << j << "]: " << b[i][j]   << " # "<< endl;
         }
         //cout << endl;
     }

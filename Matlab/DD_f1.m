@@ -1,3 +1,4 @@
+function DD_f1
 filename = 'DD_f1_0_5.dat';
 delimiterIn = ' ';
 A = importdata(filename,delimiterIn);
@@ -31,3 +32,4 @@ graficarTodos(A,B,C,D,E,'Diferencias Divididas, Función 1');
 %graficar1(C);
 %graficar1(D);
 %graficar1(E);
+end

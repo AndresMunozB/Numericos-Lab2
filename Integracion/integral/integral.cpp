@@ -1,25 +1,22 @@
 #include "integral.h"
 
-CalculoIntegral::CalculoIntegral(){
+Integral::Integral(){
 }
 
-long double CalculoIntegral::trapecio(vector<long double> vectorInterpolado, long double a, long double b){
-	int largo = vectorInterpolado.size();
-	long double integral;
-	long double inicio = vectorInterpolado[0];
-	long double final = vectorInterpolado[largo-1];
-	long double valor = 0.0;
 
-	for(int i = 1; i<(largo-1); i++){
-		valor = valor + (2.0*vectorInterpolado[i]);
+long double Integral::trapecio(vector<long double> vi, long double a, long double b){
+	int n = vi.size();
+	long double result = vi[0] + vi[n-1];
+	for(int i = 1; i<(n-1); i++){
+		result += (2.0*vi[i]);
 	}
-
-	integral = ((b-a)/(2*(largo-1)))*(inicio+valor+final);
-	return integral;
+	result *= ((b-a)/(2*(n-1)));
+	return result;
 }
 
-long double CalculoIntegral::simpson(int n, vector<long double> vectorInterpolado, long double a, long double b){
 
+long double Integral::simpson(vector<long double> vectorInterpolado, long double a, long double b){
+	int n = vectorInterpolado.size();
 	long double valoresImpares = 0.0;
 	long double valoresPares = 0.0;
 	int largo = vectorInterpolado.size();
@@ -34,7 +31,7 @@ long double CalculoIntegral::simpson(int n, vector<long double> vectorInterpolad
 	}
 	for (int i = 1; i <= (n/2) ; i++)
 	{	
-			valoresImpares += 4.0*vectorInterpolado[(i*2)-1];	
+		valoresImpares += 4.0*vectorInterpolado[(i*2)-1];	
 	}
 
 	//FORMULA DE SIMPSON 1/3 APLICACIÓN MULTIPLE
@@ -44,7 +41,7 @@ long double CalculoIntegral::simpson(int n, vector<long double> vectorInterpolad
 
 }
 
-long double CalculoIntegral::errorRelativo(long double valorMedido, long double valorReal){
+long double Integral::errorRelativo(long double valorMedido, long double valorReal){
 	long double error;
 	long double absoluto;
 	absoluto = valorReal-valorMedido;
