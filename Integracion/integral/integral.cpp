@@ -14,31 +14,19 @@ long double Integral::trapecio(vector<long double> vi, long double a, long doubl
 	return result;
 }
 
-
 long double Integral::simpson(vector<long double> vectorInterpolado, long double a, long double b){
 	int n = vectorInterpolado.size();
-	long double valoresImpares = 0.0;
-	long double valoresPares = 0.0;
-	int largo = vectorInterpolado.size();
-	long double inicial = vectorInterpolado[0];
-	long double final = vectorInterpolado[n];
-	long double integral = 0.0;
-
-	for (int i = 1; i <= (n/2) -1; i++)
+	long double result = vectorInterpolado[0] + vectorInterpolado[n-1];
+	for (int i = 1; i < (n/2); i++)
 	{	
-		valoresPares += 2.0*vectorInterpolado[i*2];
-
+		result += 2.0*vectorInterpolado[i*2];
+		result += 4.0*vectorInterpolado[(i*2)-1];
 	}
-	for (int i = 1; i <= (n/2) ; i++)
-	{	
-		valoresImpares += 4.0*vectorInterpolado[(i*2)-1];	
+	if(n%2 != 0){
+		result += 4.0*vectorInterpolado[n-2];
 	}
-
-	//FORMULA DE SIMPSON 1/3 APLICACIÓN MULTIPLE
-
-	integral = ((b-a)/(3.0*n))*(inicial + valoresImpares + valoresPares + final);
-	return integral;
-
+	result *= ((b-a)/(3.0*n));
+	return result;
 }
 
 long double Integral::errorRelativo(long double valorMedido, long double valorReal){

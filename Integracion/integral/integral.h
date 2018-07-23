@@ -13,7 +13,7 @@ class Integral
 	public:
 		Integral();
 		long double trapecio(vector<long double> vectorInterpolado, long double a, long double b);
-		long double simpson(int n, vector<long double> vectorInterpolado, long double a, long double b);
+		long double simpson(vector<long double> vectorInterpolado, long double a, long double b);
 		long double errorRelativo(long double valorMedido, long double valorReal);
 };
 

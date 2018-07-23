@@ -26,7 +26,7 @@ E = importdata(filename,delimiterIn);
 %B = importdata(filename,delimiterIn);
     
 
-graficarTodos(A,B,C,D,E,'Diferencias Divididas, Función 2');
+graficarTodos(A,B,C,D,E,'Spline Cubico, Función 2');
 %graficar1(A);
 %graficar1(B);
 %graficar1(C);

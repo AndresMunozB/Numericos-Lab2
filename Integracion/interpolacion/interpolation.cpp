@@ -31,7 +31,6 @@ vector<vector<long double>> createMatriz(int n, int m){
     return b;
 }
 
-
 long double factorial(long double n){
     long double result = 1.0;
     if(n<0){
@@ -56,6 +55,7 @@ void saveInterpolationResult(string nameFile,vector<long double> vectorXi, vecto
 	}
 	output.close();
 }
+
 void saveInterpolationError(int function,vector<long double> error_df, vector<long double> error_dd, vector<long double> error_ms, vector<long double> error_sc){
     ofstream output;
 	output.open("../../Matlab/RMSE_F" + to_string(function)+ ".dat" ,ios::out);
@@ -93,6 +93,9 @@ vector<long double> createVectorXi(long double start, long double end, long doub
 	for(long double i = start; i <= end; i = i + distance){
 		result.push_back(i);
 	}
+    if(result[result.size()-1] != 200.0){
+        result.push_back(200.0);
+    }
 	return result;
 }
 
@@ -108,87 +111,52 @@ vector<long double> createVectorYi(vector<long double> vectorXi, int type){
     return result;
 }
 
-vector<long double> Interpolation::differenceFinite(vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_0_05){
-    vector<long double> result;
+vector<vector<long double>> createMatrizFinite(vector<long double> vectorXi, vector<long double> vectorYi){
     int n = vectorXi.size();
-    //mat b = mat(n,n);
-    //mat c = mat(n,n);
-    //cout << "dentro" << endl;
-    vector<vector<long double>> b= createMatriz(n,n);
-    vector<vector<long double>> c= createMatriz(n,n);
-    //double b[n][n];
-    //long double c[n][n];
-    long double xt;
-    long double yi;
-    //
-    //cout << "hola" << endl;
-    
-    /*for(int i=0;i<n;i++){
-        b[i][0] = vectorYi[i];
-        c[i][0] = vectorYi[i];
-        
-    }
-    //
-
-    for(int j=1;j<n;j++){
-		for(int i=0;i<n-j;i++){
-			b[i][j] = b[i+1][j-1] - b[i][j-1];
-            cout << b[i][j] << "= " << b[i+1][j-1] << " - " <<  b[i][j-1] << endl;
-		}
-	}*/
+    vector<vector<long double>> b= createMatriz(n,n+1);
+    long double h = vectorXi[1]-vectorXi[0];
+    int k = 0;
      for(int i=0;i<n;i++){
         b[i][0] = vectorXi[i];
         b[i][1] = vectorYi[i];
-        c[i][0] = vectorXi[i];
-        c[i][1] = vectorYi[i];
-        //cout << b[i][0] << ", " << b[i][1] << endl;
     }
-    //
-    
-    
-    int k = 0;
     for(int j = 2; j < n+1 ; j++){
         k++;
         int i;
         for( i = 0 ; i< n-k;i++){
             b[i][j] = (b[i+1][j-1] - b[i][j-1]);    
-            //cout << "b["<< i << "][" << j << "]: " << b[i][j]   << " # "<< endl;
         }
-        //cout << endl;
     }
-
-    //
-    long double h = vectorXi[1]-vectorXi[0];
-	for(int j = 2; j<n;j++){
+	for(int j = 2; j<n+1;j++){
 		for(int i=0; i<n-j;i++){
-            //cout << "b[i][j]: " << b[i][j] << "pow(h,j): " << pow(h,j) << "factorial(j):" << factorial(j) << endl;
-			c[i][j] = (b[i][j])/((pow(h,j))*factorial(j));
-            //cout << "(pow(h,j): " << pow(h,j) << endl; 
-            //cout << "factorial(j): " << factorial(j) << endl;
-            //cout << endl;
+			b[i][j] = (b[i][j])/((pow(h,j))*factorial(j));
+
 		}
 	}
-    for (int i = 0 ; i < n; i++){
-        //cout << c[0][i] << endl;
-    }
+    return b;
+}
 
-    //Calculando los Yi despues de interpolar la funcion
-    
+vector<long double> evaluateFinite(vector<vector<long double>> b,vector<long double> vectorXi_0_05){
+    vector<long double> result;
+    int n = b[0].size()-1;
     int contador = vectorXi_0_05.size();
-    
+    long double xi,xt,yi,x,ai,aux;
 	for(int i = 0; i<contador; i++){
-		xt=1;
-		yi = c[0][0];
-		for(int j = 0;j<n-1;j++){
-			xt = xt*(vectorXi_0_05[i]-vectorXi[j]);
-			yi = yi + c[0][j+1]*xt;
+        xt=1.0;
+		yi = b[0][1];
+        x = vectorXi_0_05[i];
+		for(int j = 0;j<n-10;j++){//evaluar el punto en el polinomio interpolado.
+            xi = b[j][0];
+            ai = b[0][j+1];
+			xt = xt*(x-xi);
+			yi = yi + ai*xt;
 		}
-        //cout << yi << endl;
         result.push_back(yi);
     }
-
     return result;
+
 }
+
 vector<vector<long double>> createMatrizDividided(vector<long double> vectorXi, vector<long double> vectorYi){
 
     int n = vectorXi.size();
@@ -213,49 +181,44 @@ vector<vector<long double>> createMatrizDividided(vector<long double> vectorXi, 
     }
     return b;
 }
+
 vector<long double> evaluateDividided(vector<vector<long double>> b,vector<long double> vectorXi_0_05){
     vector<long double> result;
     int n = b[0].size()-1;
     int contador = vectorXi_0_05.size();
-    long double xi;
-    long double xt;
-    long double yi;
-    long double x;
-    long double ai;
-    long double aux;
+    long double xi,xt,yi,x,ai,aux;
 
 	for(int i = 0; i<contador; i++){
-		
         xt=1.0;
 		yi = b[0][1];
-        //yi = b[2][0];
         x = vectorXi_0_05[i];
-        //cout << "a0: " << yi << endl;
-        
 		for(int j = 0;j<n-10;j++){//evaluar el punto en el polinomio interpolado.
             xi = b[j][0];
             ai = b[0][j+1];
-            //ai = b[j+2][0];
-            //cout <<"x: " <<  x << " # xi: " << xi << " # xta: "<< xt << "# ai: " << ai;
 			xt = xt*(x-xi);
 			yi = yi + ai*xt;
-            //cout << " # xtd: "<< xt<< " # yi: " <<yi << endl;
-            
 		}
-        //cout << endl;
         result.push_back(yi);
-        //cout << "i: " << i << endl;
     }
     return result;
 
 }
 
 
+vector<long double> Interpolation::differenceFinite(vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_0_05){
+
+    vector<vector<long double>> b= createMatrizFinite(vectorXi,vectorYi);
+    vector<long double> result = evaluateFinite(b,vectorXi_0_05);
+
+    return result;
+}
+
 vector<long double> Interpolation::differenceDivided(vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_0_05){
     vector<vector<long double>> b = createMatrizDividided(vectorXi,vectorYi);
     vector<long double> result = evaluateDividided(b,vectorXi_0_05);
     return result;
 }
+
 
 vector<long double> Interpolation::minimumSquare(vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_0_05, int degree){
     vector<long double> result; //Vector que retorna la funcion
@@ -270,33 +233,22 @@ vector<long double> Interpolation::minimumSquare(vector<long double> vectorXi, v
         sum = 0;
         for(int j=0;j<vectorXi.size();j++){
             sum +=  pow(vectorXi[j],i);
-            //cout <<"i,j:" << i <<","<< j <<" ;vectorXi[j]: " << vectorXi[j] << " ;pow: "<< pow(vectorXi[j],i)<< endl;
         }
-        //cout << endl;
         summations.push_back(sum);
     }
-    //Se llena la matriz A con los valores calculados (sumatorias).
     for(int i=0;i<n;i++){
         for(int j=0;j<n;j++){
             A(i,j)= summations[i+j];
-            //cout << summations[i+j] << ", ";
         }
-        //cout << endl ;
     }
     //Se llena la matriz B (sumatorias) -> E(Yi*Xi^n)
     for(int i=0;i<n;i++){
           sum = 0;
           for(int j=0;j<vectorXi.size();j++){
               sum += vectorYi[j]*(pow(vectorXi[j],i));  
-              //cout << vectorYi[j] << ", " << vectorXi[j] << endl;  
           }
-          //cout <<"i:"<< i <<"sum: " << sum << endl;
-          //cout << endl;
           B(i,0)=sum;
-          //cout << B(i,0) << endl;
     }
-    //mat x = solve(A,B); //warning
-    //mat c = inv(A)*B;
 
     //Se resuelve el sistema de ecuaciones.
     mat L, U;
@@ -311,18 +263,15 @@ vector<long double> Interpolation::minimumSquare(vector<long double> vectorXi, v
     {
         resultYi = 0;
         for (int j = 0; j < n ; j++){
-            //cout <<  "C(j,0): " << C(j,0) << " # pow(vectorXi_0_05[i],j): " << pow(vectorXi_0_05[i],j); 
             resultYi += C(j,0) * pow(vectorXi_0_05[i],j);
-            //cout << " # resultYi: " << resultYi << endl; 
-            //cout << j << ", ";
         }
-        //cout <<"i: " << i  << "val:" << resultYi<< endl;
         result.push_back(resultYi);
     }
     return result;
    
 }
-vector<long double> Interpolation::cubicSpline          (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005){
+
+vector<long double> Interpolation::cubicSpline(vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005){
     int n = vectorXi.size();
     vector<long double> h;
     vector<long double> result;
@@ -375,7 +324,7 @@ vector<long double> Interpolation::cubicSpline          (vector<long double> vec
     i=0;
     long double a,b,c,d,e,Rj;
 	
-    while(i<vectorXi_005.size()){
+    while(i<vectorXi_005.size()-1){
 		for(j=0;j<n-1;j++){
 			if(vectorXi_005[i]>= vectorXi[j] && vectorXi_005[i] < vectorXi[j+1]){
 				break;
@@ -387,6 +336,7 @@ vector<long double> Interpolation::cubicSpline          (vector<long double> vec
             c = ( ( (vectorYi[j+1] - vectorYi[j]) / h[j]) - ((X1[j] - 0) * h[j] /6)) * vectorXi_005[i];
             d = ( (vectorYi[j]*vectorXi[j+1]) - (vectorYi[j+1]*vectorXi[j])) / h[j] ;
             e = h[j]*(( (vectorXi[j]*X1[j]) - (vectorXi[j+1]* 0 )) / 6);
+            
 		}
 
 		if(j == n-2){
@@ -395,6 +345,7 @@ vector<long double> Interpolation::cubicSpline          (vector<long double> vec
 			c = ( ( (vectorYi[j+1] - vectorYi[j]) / h[j]) - ((0 - X1[j-1]) * h[j] /6)) * vectorXi_005[i];
 			d = ( (vectorYi[j]*vectorXi[j+1]) - (vectorYi[j+1]*vectorXi[j])) / h[j] ;
 			e = h[j]*(( (vectorXi[j]*0) - (vectorXi[j+1]*X1[j-1])) / 6);
+            
 		}
 		
 		if(j != n-2 && j != 0){
@@ -403,8 +354,13 @@ vector<long double> Interpolation::cubicSpline          (vector<long double> vec
 			c = ( ( (vectorYi[j+1] - vectorYi[j]) / h[j]) - ((X1[j] - X1[j-1]) * h[j] /6)) * vectorXi_005[i];
 			d = ( (vectorYi[j]*vectorXi[j+1]) - (vectorYi[j+1]*vectorXi[j])) / h[j] ;
 			e = h[j]*(( (vectorXi[j]*X1[j]) - (vectorXi[j+1]*X1[j-1])) / 6);
+            
+            
+            
 		}
-		Rj = a+b+c+d+e;
+        
+		
+        Rj = a+b+c+d+e;
 		result.push_back(Rj);
 		i++;
 	}
@@ -415,11 +371,14 @@ vector<long double> Interpolation::cubicSpline          (vector<long double> vec
 
 
 long double Interpolation::RMSE(vector<long double> vectorYiIntepolate, vector<long double> vectorYiRial){
-	long double size = vectorYiRial.size();
+	long double size = vectorYiIntepolate.size();
+    cout << "size: " << size << endl;
 	long double result = 0;
 	for(int i = 0; i<size;i++){
+        cout << vectorYiRial[i] << " # " << vectorYiIntepolate[i] << endl;
 		result += pow(vectorYiRial[i]-vectorYiIntepolate[i],2.0);
 	}
+    //cout << result << endl;
 	result = sqrt(result/size);
 	return result;
 }
