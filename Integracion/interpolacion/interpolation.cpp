@@ -50,15 +50,16 @@ long double factorial(long double n){
 void saveInterpolationResult(string nameFile,vector<long double> vectorXi, vector<long double> vectorYi){
 	ofstream output;
 	output.open(nameFile,ios::out);
-	for(int i = 0; i<vectorXi.size(); i++){
+	for(int i = 0; i<vectorYi.size(); i++){
 		output<<vectorXi[i]<<" "<<vectorYi[i]<<endl;
 	}
 	output.close();
 }
 
-void saveInterpolationError(int function,vector<long double> error_df, vector<long double> error_dd, vector<long double> error_ms, vector<long double> error_sc){
+void saveInterpolationError(string path,int function,vector<long double> error_df, vector<long double> error_dd, vector<long double> error_ms, vector<long double> error_sc){
     ofstream output;
-	output.open("../../Matlab/RMSE_F" + to_string(function)+ ".dat" ,ios::out);
+    //"../../Matlab/RMSE_F" + to_string(function)+ ".dat"
+	output.open(path ,ios::out);
 	output<< "RMSE Función: " << function << endl << endl;
     output<<"Diferencias Finitas:" << endl;
     output<<"  Distancia = 0.5: " << error_df[0] << endl;
@@ -372,13 +373,10 @@ vector<long double> Interpolation::cubicSpline(vector<long double> vectorXi, vec
 
 long double Interpolation::RMSE(vector<long double> vectorYiIntepolate, vector<long double> vectorYiRial){
 	long double size = vectorYiIntepolate.size();
-    cout << "size: " << size << endl;
 	long double result = 0;
 	for(int i = 0; i<size;i++){
-        cout << vectorYiRial[i] << " # " << vectorYiIntepolate[i] << endl;
 		result += pow(vectorYiRial[i]-vectorYiIntepolate[i],2.0);
 	}
-    //cout << result << endl;
 	result = sqrt(result/size);
 	return result;
 }

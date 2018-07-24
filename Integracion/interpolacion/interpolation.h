@@ -11,7 +11,7 @@ vector<long double> createVectorYi   (vector<long double> vectorXi, int type);
 long double         factorial        (long double n);
 long double         fx               (long double x,int type);
 void                saveInterpolationResult             (string nameFile,vector<long double> vectorXi, vector<long double> vectorYi);
-void saveInterpolationError(int function,vector<long double> error_df, vector<long double> error_dd, vector<long double> error_ms, vector<long double> error_sc);
+void saveInterpolationError(string path,int function,vector<long double> error_df, vector<long double> error_dd, vector<long double> error_ms, vector<long double> error_sc);
 void                minErrorMinimumSquare();
 
 

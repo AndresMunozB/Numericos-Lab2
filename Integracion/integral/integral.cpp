@@ -14,16 +14,16 @@ long double Integral::trapecio(vector<long double> vi, long double a, long doubl
 	return result;
 }
 
-long double Integral::simpson(vector<long double> vectorInterpolado, long double a, long double b){
-	int n = vectorInterpolado.size();
-	long double result = vectorInterpolado[0] + vectorInterpolado[n-1];
+long double Integral::simpson(vector<long double> vi, long double a, long double b){
+	int n = vi.size();
+	long double result = vi[0] + vi[n-1];
 	for (int i = 1; i < (n/2); i++)
 	{	
-		result += 2.0*vectorInterpolado[i*2];
-		result += 4.0*vectorInterpolado[(i*2)-1];
+		result += 2.0*vi[i*2];
+		result += 4.0*vi[(i*2)-1];
 	}
 	if(n%2 != 0){
-		result += 4.0*vectorInterpolado[n-2];
+		result += 4.0*vi[n-2];
 	}
 	result *= ((b-a)/(3.0*n));
 	return result;
