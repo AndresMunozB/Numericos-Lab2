@@ -409,3 +409,54 @@ long double Interpolation::RMSE(vector<long double> vectorYiIntepolate, vector<l
 	result = sqrt(result/size);
 	return result;
 }
+void minErrorMinimumSquare(Data data){
+    vector<long double> result_0_5;
+    
+    Interpolation interpolation = Interpolation();
+    long double min = 0;
+    long double error = 0;
+    int indice = 0;
+    result_0_5 = interpolation.minimumSquare(data.vectorXi_0_5,data.vectorYi_0_5_f1,data.vectorXiRial,1);
+    min = interpolation.RMSE(result_0_5,data.vectorYiRial_f1);
+    cout << error << endl;
+    for(int i = 2; i<100 ;i++){
+        result_0_5 = interpolation.minimumSquare(data.vectorXi_0_5,data.vectorYi_0_5_f1,data.vectorXiRial,i);
+        error = interpolation.RMSE(result_0_5,data.vectorYiRial_f1);
+        
+        if(error < min){
+            min = error;
+            indice = i;
+            cout << error << " , "  << i << endl;
+           
+        }
+    }  
+    cout << "min: " << min << " # " << "potencia: " << indice << endl;
+       
+    
+}
+
+void minErrorMinimumSquare2(Data data){
+    vector<long double> result_0_5;
+    
+    Interpolation interpolation = Interpolation();
+    long double min = 0;
+    long double error = 0;
+    int indice = 0;
+    result_0_5 = interpolation.minimumSquare(data.vectorXi_0_5,data.vectorYi_0_5_f2,data.vectorXiRial,1);
+    min = interpolation.RMSE(result_0_5,data.vectorYiRial_f1);
+    cout << error << endl;
+    for(int i = 2; i<100 ;i++){
+        result_0_5 = interpolation.minimumSquare(data.vectorXi_0_5,data.vectorYi_0_5_f2,data.vectorXiRial,i);
+        error = interpolation.RMSE(result_0_5,data.vectorYiRial_f2);
+        
+        if(error < min){
+            min = error;
+            indice = i;
+            cout << error << " , "  << i << endl;
+           
+        }
+    }  
+    cout << "min: " << min << " # " << "potencia: " << indice << endl;
+       
+    
+}

@@ -4,28 +4,7 @@
 #include "../integral/integral.h"
 
 using namespace std;
-class Data
-{
-    public:
-        vector<long double> vectorXi_0_5;
-        vector<long double> vectorXi_1  ;
-        vector<long double> vectorXi_5  ;
-        vector<long double> vectorXi_10 ;
 
-        vector<long double> vectorYi_0_5_f1;
-        vector<long double> vectorYi_1_f1  ;
-        vector<long double> vectorYi_5_f1  ;
-        vector<long double> vectorYi_10_f1 ;
-
-        vector<long double> vectorYi_0_5_f2;
-        vector<long double> vectorYi_1_f2  ;
-        vector<long double> vectorYi_5_f2  ;
-        vector<long double> vectorYi_10_f2 ;
-
-        vector<long double> vectorXiRial;
-        vector<long double> vectorYiRial_f1;
-        vector<long double> vectorYiRial_f2;
-};
 
 vector<vector<long double>> executeDF(int function, int save, Data data){
 
@@ -116,10 +95,10 @@ vector<vector<long double>> executeMS(int function, int save, Data data){
     
     int degree = 0;
     if(function == 1){
-        degree = 50;
+        degree = 66;
     }
     else if(function == 2){
-        degree  = 15;
+        degree  = 4;
     }
 
     if(function == 1){
@@ -261,6 +240,8 @@ void menu(){
     string key;
     system("clear");
 
+    //minErrorMinimumSquare(data);
+    minErrorMinimumSquare2(data);
 
     while(1){
         printMenu();
