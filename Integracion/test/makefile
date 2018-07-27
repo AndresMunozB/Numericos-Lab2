@@ -8,6 +8,7 @@ clean:
 	mkdir ../resultados/DD
 	mkdir ../resultados/DF
 	mkdir ../resultados/MS
+	mkdir ../resultados/CI
 	
 install:
 	mkdir ../resultados
@@ -16,3 +17,4 @@ install:
 	mkdir ../resultados/DD
 	mkdir ../resultados/DF
 	mkdir ../resultados/MS
+	mkdir ../resultados/CI

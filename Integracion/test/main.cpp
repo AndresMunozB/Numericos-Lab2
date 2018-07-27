@@ -116,7 +116,7 @@ vector<vector<long double>> executeMS(int function, int save, Data data){
     
     int degree = 0;
     if(function == 1){
-        degree = 40;
+        degree = 50;
     }
     else if(function == 2){
         degree  = 15;
@@ -196,6 +196,7 @@ vector<long double> calculateErrors(vector<vector<long double>> results, vector<
 }
 
 void printMenu(){
+    cout << endl << endl;
     cout << "       MENU" << endl << endl;
     cout << "1) Método de Diferencias Finitas   (DF)." << endl;
     cout << "2) Método de Diferencias Divididas (DD)." << endl;
@@ -224,9 +225,9 @@ void pause(){
 void menu(){
     Data data = Data();
     data.vectorXi_0_5  = createVectorXi(-200.0,200.0,0.5);
-    data.vectorXi_1    = createVectorXi(-200.0,200.0,1);
-    data.vectorXi_5    = createVectorXi(-200.0,200.0,5);
-    data.vectorXi_10   = createVectorXi(-200.0,200.0,10);
+    data.vectorXi_1    = createVectorXi(-200.0,200.0,1  );
+    data.vectorXi_5    = createVectorXi(-200.0,200.0,5  );
+    data.vectorXi_10   = createVectorXi(-200.0,200.0,10 );
 
     data.vectorYi_0_5_f1  = createVectorYi(data.vectorXi_0_5,1);
 	data.vectorYi_1_f1    = createVectorYi(data.vectorXi_1  ,1);
@@ -254,6 +255,7 @@ void menu(){
     vector<long double> error_ms;// = calculateErrors(resultMS,data.vectorYiRial); //RMSE Minimos Cuadrados.
     vector<long double> error_cs;// = calculateErrors(resultCS,data.vectorYiRial); //RMSE Spline Cubico.
 
+    Integral integral = Integral();
     string option = "";
     string optionf = "";
     string key;
@@ -346,16 +348,6 @@ void menu(){
 
             saveInterpolationError("../resultados/_Errores/RMSE_F" + to_string(1)+ ".dat",1,error_df,error_dd,error_ms,error_cs);
 
-            /*error_df.clear();
-            error_dd.clear();
-            error_ms.clear();
-            error_cs.clear();
-
-            resultDF.clear();
-            resultDD.clear();
-            resultMS.clear();
-            resultCS.clear();*/
-
             cout << "> Calculando RMSE para f2 con metodo DF..." << endl;
             resultDF = executeDF(2,0,data);
             error_df = calculateErrors(resultDF,data.vectorYiRial_f2); //RMSE Diferencias Finitas.
@@ -376,6 +368,44 @@ void menu(){
             pause();
             system("clear");
             
+        }
+        else if(option.compare("6") == 0){
+            system("clear");
+            
+            resultMS = executeMS(1,0,data);
+            long double integral_f1 = 7.2260*pow(10,86);
+            long double integral_f1_trapecio = integral.trapecio(resultMS[0],-200,200);
+            long double integral_f1_simpson = integral.simpson(resultMS[0],-200,200);
+            long double error_f1_trapecio = integral.errorRelativo(integral_f1_trapecio,integral_f1);
+            long double error_f1_simpson = integral.errorRelativo(integral_f1_simpson,integral_f1);
+            cout << endl;
+            cout << "   Function 1:" << endl << endl;
+            cout << "Integral Real: " << integral_f1 << endl;
+            cout << "Integral Trapecio: " << integral_f1_trapecio << endl;
+            cout << "Integral Simpson : " << integral_f1_simpson << endl;
+            cout << "Error relativo Trapecio: " << error_f1_trapecio << endl;
+            cout << "Error relativo Simpson: " << error_f1_simpson << endl;
+
+            saveResultsCI("../resultados/CI/F_" + to_string(1)+ ".dat",1,integral_f1,integral_f1_trapecio,integral_f1_simpson,error_f1_trapecio,error_f1_simpson);
+
+            resultMS = executeMS(2,0,data);
+            long double integral_f2 = 2.1334*pow(10,7);
+            long double integral_f2_trapecio = integral.trapecio(resultMS[0],-200,200);
+            long double integral_f2_simpson = integral.simpson(resultMS[0],-200,200);
+            long double error_f2_trapecio = integral.errorRelativo(integral_f2_trapecio,integral_f2);
+            long double error_f2_simpson = integral.errorRelativo(integral_f2_simpson,integral_f2);
+            cout << endl << endl;
+            cout << "   Funcion 2:" << endl << endl;
+            cout << "Integral Real: " << integral_f2 << endl;
+            cout << "Integral Trapecio: " << integral_f2_trapecio << endl;
+            cout << "Integral Simpson : " << integral_f2_simpson << endl;
+            cout << "Error relativo Trapecio: " << error_f2_trapecio << endl;
+            cout << "Error relativo Simpson: " << error_f2_simpson << endl;
+            cout << endl;
+            saveResultsCI("../resultados/CI/F_" + to_string(2)+ ".dat",2,integral_f2,integral_f2_trapecio,integral_f2_simpson,error_f2_trapecio,error_f2_simpson);
+
+            pause();
+            system("clear");
         }
         else if(option.compare("7") == 0){
             system("clear");
@@ -403,15 +433,6 @@ void menu(){
 
             saveInterpolationError("../resultados/_Errores/RMSE_F" + to_string(1)+ ".dat",1,error_df,error_dd,error_ms,error_cs);
 
-            error_df.clear();
-            error_dd.clear();
-            error_ms.clear();
-            error_cs.clear();
-
-            resultDF.clear();
-            resultDD.clear();
-            resultMS.clear();
-            resultCS.clear();
 
             cout << "> Interpolando con DF para f2.." << endl;;
             resultDF = executeDF(2,1,data);
@@ -431,8 +452,30 @@ void menu(){
             error_cs = calculateErrors(resultCS,data.vectorYiRial_f2); //RMSE Spline Cubico.
             
             saveInterpolationError("../resultados/_Errores/RMSE_F" + to_string(2)+ ".dat",2,error_df,error_dd,error_ms,error_cs);
+
+           cout << "> Realizando calculo integral para funcion 1..."<< endl;
+            resultMS = executeMS(1,0,data);
+            long double integral_f1 = 7.2260*pow(10,86);
+            long double integral_f1_trapecio = integral.trapecio(resultMS[0],-200,200);
+            long double integral_f1_simpson = integral.simpson(resultMS[0],-200,200);
+            long double error_f1_trapecio = integral.errorRelativo(integral_f1_trapecio,integral_f1);
+            long double error_f1_simpson = integral.errorRelativo(integral_f1_simpson,integral_f1);
+
+            saveResultsCI("../resultados/CI/F_" + to_string(1)+ ".dat",1,integral_f1,integral_f1_trapecio,integral_f1_simpson,error_f1_trapecio,error_f1_simpson);
+
+            cout << "> Realizando calculo integral para funcion 2..."<< endl;
+            resultMS = executeMS(2,0,data);
+            long double integral_f2 = 2.1334*pow(10,7);
+            long double integral_f2_trapecio = integral.trapecio(resultMS[0],-200,200);
+            long double integral_f2_simpson = integral.simpson(resultMS[0],-200,200);
+            long double error_f2_trapecio = integral.errorRelativo(integral_f2_trapecio,integral_f2);
+            long double error_f2_simpson = integral.errorRelativo(integral_f2_simpson,integral_f2);
+            saveResultsCI("../resultados/CI/F_" + to_string(2)+ ".dat",2,integral_f2,integral_f2_trapecio,integral_f2_simpson,error_f2_trapecio,error_f2_simpson);
+
             cout << endl;
             cout << "Los archivos resultantes estan guardados en: /resultados" << endl;
+
+
 
             pause();
             system("clear");
@@ -455,8 +498,6 @@ void menu(){
 }
 int main(int argc, char *argv[])
 {
-    //execute(1);
-    //execute(2);
     menu();
     return 0;
 }

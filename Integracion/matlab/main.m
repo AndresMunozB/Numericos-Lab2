@@ -1,4 +1,14 @@
+disp('   MENU');
+
+disp('1) Graficar resultados de Diferencias Finitas');
+disp('2) Graficar resultados de Diferencias Divididas');
+disp('3) Graficar resultados de Mínimos Cuadrados');
+disp('4) Graficar resultados de Spline Cubico');
 metodo = input('Ingrese método : ','s');
+
+
+disp('1) Función 1');
+disp('2) Funcion 2');
 funcion = input('Ingrese función: ','s');
 
 if(strcmp(metodo,'3'))

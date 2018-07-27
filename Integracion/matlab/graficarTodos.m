@@ -8,12 +8,13 @@ hold(axes1,'on');
 hold on;
 grid on
 
-% Create xlabel
+% Create 
+
+plot(E(1:end,1),E(1:end,2),'-s','MarkerSize',1,'MarkerFaceColor','g'); 
 plot(A(1:end,1),A(1:end,2),'-+','MarkerSize',1,'MarkerFaceColor','c');
 plot(B(1:end,1),B(1:end,2),'-o','MarkerSize',1,'MarkerFaceColor','m'); 
 plot(C(1:end,1),C(1:end,2),'-*','MarkerSize',1,'MarkerFaceColor','y'); 
 plot(D(1:end,1),D(1:end,2),'-x','MarkerSize',1,'MarkerFaceColor','r'); 
-plot(E(1:end,1),E(1:end,2),'-s','MarkerSize',1,'MarkerFaceColor','g'); 
 
 title(strcat('Método: ',name));
 ylabel('Yi'); % y-axis label

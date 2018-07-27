@@ -13,6 +13,8 @@ long double         fx               (long double x,int type);
 void                saveInterpolationResult             (string nameFile,vector<long double> vectorXi, vector<long double> vectorYi);
 void saveInterpolationError(string path,int function,vector<long double> error_df, vector<long double> error_dd, vector<long double> error_ms, vector<long double> error_sc);
 void                minErrorMinimumSquare();
+void saveResultsCI(string nameFile, int function, long double integral, long double trapecio, long double simpson, long double eTrapecio, long double eSimpson);
+
 
 
 class Interpolation
@@ -22,7 +24,8 @@ class Interpolation
         virtual vector<long double> differenceDivided    (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005);
         virtual vector<long double> minimumSquare        (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005,int degree);
         virtual vector<long double> cubicSpline          (vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_005);
-        virtual long double         RMSE                 (vector<long double> vectorYiIntepolate, vector<long double> vectorYiRial);    
+        virtual long double         RMSE                 (vector<long double> vectorYiIntepolate, vector<long double> vectorYiRial);   
+         
 };
 
 #endif

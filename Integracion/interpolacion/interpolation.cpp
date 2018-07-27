@@ -55,6 +55,18 @@ void saveInterpolationResult(string nameFile,vector<long double> vectorXi, vecto
 	}
 	output.close();
 }
+void saveResultsCI(string nameFile, int function, long double integral, long double trapecio, long double simpson, long double eTrapecio, long double eSimpson){
+    ofstream output;
+	output.open(nameFile,ios::out);
+	output<< "Calculo Integral Función: " << function << endl << endl;
+    output << "Real    : " << integral << endl;
+    output << "Trapecio: " << trapecio << endl;
+    output << "Simpson : " << simpson << endl << endl;
+    output << "Errores Relativos:" << endl << endl;
+    output << "Error Trapecio: " << eTrapecio << endl;
+    output << "Error Simpson : " << eSimpson << endl;
+	output.close();
+}
 
 void saveInterpolationError(string path,int function,vector<long double> error_df, vector<long double> error_dd, vector<long double> error_ms, vector<long double> error_sc){
     ofstream output;
@@ -87,7 +99,12 @@ void saveInterpolationError(string path,int function,vector<long double> error_d
 
 
 	output.close();
+
+
+
 }
+
+
 
 vector<long double> createVectorXi(long double start, long double end, long double distance){
     vector<long double> result;
@@ -142,15 +159,23 @@ vector<long double> evaluateFinite(vector<vector<long double>> b,vector<long dou
     int n = b[0].size()-1;
     int contador = vectorXi_0_05.size();
     long double xi,xt,yi,x,ai,aux;
+
 	for(int i = 0; i<contador; i++){
         xt=1.0;
 		yi = b[0][1];
         x = vectorXi_0_05[i];
-		for(int j = 0;j<n-10;j++){//evaluar el punto en el polinomio interpolado.
+		for(int j = 0;j<n;j++){//evaluar el punto en el polinomio interpolado.
+            
             xi = b[j][0];
+            
             ai = b[0][j+1];
 			xt = xt*(x-xi);
+            
+            if (xt > 1e+87 || xt < -1e+87 || ai > 1e+87 || ai < -1e+87 || ai*xt > 1e+87 || ai*xt < -1e+87 ){
+                continue;
+            }
 			yi = yi + ai*xt;
+            
 		}
         result.push_back(yi);
     }
@@ -193,10 +218,15 @@ vector<long double> evaluateDividided(vector<vector<long double>> b,vector<long 
         xt=1.0;
 		yi = b[0][1];
         x = vectorXi_0_05[i];
-		for(int j = 0;j<n-10;j++){//evaluar el punto en el polinomio interpolado.
+		for(int j = 0;j<n;j++){//evaluar el punto en el polinomio interpolado.
             xi = b[j][0];
             ai = b[0][j+1];
 			xt = xt*(x-xi);
+            if (xt > 1e+87 || xt < -1e+87 || ai > 1e+87 || ai < -1e+87 || ai*xt > 1e+87 || ai*xt < -1e+87 ){
+                //cout << cut << "|" << j << endl;
+                //cout << "xt: " << xt<< "#" << "ai: " << ai << endl;
+                continue;
+            }
 			yi = yi + ai*xt;
 		}
         result.push_back(yi);
@@ -207,7 +237,6 @@ vector<long double> evaluateDividided(vector<vector<long double>> b,vector<long 
 
 
 vector<long double> Interpolation::differenceFinite(vector<long double> vectorXi, vector<long double> vectorYi, vector<long double> vectorXi_0_05){
-
     vector<vector<long double>> b= createMatrizFinite(vectorXi,vectorYi);
     vector<long double> result = evaluateFinite(b,vectorXi_0_05);
 
