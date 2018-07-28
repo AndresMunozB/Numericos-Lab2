@@ -241,7 +241,7 @@ void menu(){
     system("clear");
 
     //minErrorMinimumSquare(data);
-    minErrorMinimumSquare2(data);
+    //minErrorMinimumSquare2(data);
 
     while(1){
         printMenu();
